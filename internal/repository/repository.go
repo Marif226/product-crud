@@ -1,5 +1,7 @@
 package repository
 
+import "database/sql"
+
 type BuyerRepo interface {
 	CreateBuyer()
 	GetBuyerById()
@@ -19,9 +21,9 @@ type Repository struct {
 	PurchaseRepo
 }
 
-func New() *Repository{
+func New(db *sql.DB) *Repository{
 	return &Repository{
-		BuyerRepo: NewBuyerPostgresRepo(),
-		PurchaseRepo: NewPurchasePostgresRepo(),
+		BuyerRepo: NewBuyerPostgresRepo(db),
+		PurchaseRepo: NewPurchasePostgresRepo(db),
 	}
 }

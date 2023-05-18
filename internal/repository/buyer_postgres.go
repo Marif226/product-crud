@@ -1,16 +1,17 @@
 package repository
 
 import (
+	"database/sql"
 	"log"
 )
 
 type BuyerRepoImpl struct {
-
+	db *sql.DB
 }
 
-func NewBuyerPostgresRepo() *BuyerRepoImpl {
+func NewBuyerPostgresRepo(db *sql.DB) *BuyerRepoImpl {
 	return &BuyerRepoImpl{
-		
+		db: db,
 	}
 }
 
