@@ -1,9 +1,12 @@
 package service
 
-import "github.com/Marif226/product-crud/internal/repository"
+import (
+	"github.com/Marif226/product-crud/internal/model"
+	"github.com/Marif226/product-crud/internal/repository"
+)
 
 type BuyerService interface {
-	CreateBuyer()
+	CreateBuyer(buyer model.Buyer) (int, error)
 	GetBuyerById()
 	UpdateBuyer()
 	DeleteBuyer()

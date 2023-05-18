@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 
+	"github.com/Marif226/product-crud/internal/model"
 	"github.com/Marif226/product-crud/internal/repository"
 )
 
@@ -16,9 +17,9 @@ func NewBuyerService(buyerRepo repository.BuyerRepo) *BuyerServiceImpl {
 	}
 }
 
-func (s *BuyerServiceImpl) CreateBuyer() {
-	s.repo.CreateBuyer()
+func (s *BuyerServiceImpl) CreateBuyer(buyer model.Buyer) (int, error) {
 	log.Println("Service Create Buyer")
+	return s.repo.CreateBuyer(buyer)
 }
 
 func (s *BuyerServiceImpl) GetBuyerById() {

@@ -1,9 +1,13 @@
 package repository
 
-import "database/sql"
+import (
+	"database/sql"
+
+	"github.com/Marif226/product-crud/internal/model"
+)
 
 type BuyerRepo interface {
-	CreateBuyer()
+	CreateBuyer(model.Buyer) (int, error)
 	GetBuyerById()
 	UpdateBuyer()
 	DeleteBuyer()
