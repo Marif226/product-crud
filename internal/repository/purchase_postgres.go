@@ -3,8 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"log"
-
 	"github.com/Marif226/product-crud/internal/model"
 )
 
@@ -56,10 +54,33 @@ func (r *PurchaseRepoImpl) GetPurchaseById(id int) (model.Purchase, error) {
 	return purchase, err
 }
 
-func (r *PurchaseRepoImpl) UpdatePurchase() {
-	log.Println("Repo Update Purhcase")
+// UpdatePurchase updates purchase using passed purchase object
+func (r *PurchaseRepoImpl) UpdatePurchase(purchase model.Purchase) (error) {
+	// log.Println("Repo Update Purhcase")
+
+	// query to update buyer in buyers table
+	query := fmt.Sprintf("UPDATE %s SET name = $1, description = $2, quantity = $3, price = $4, buyer_id = $5 WHERE id = $6;", purchasesTable)
+
+	_, err := r.db.Exec(query, purchase.Name, purchase.Description, purchase.Quantity, purchase.Price, purchase.BuyerID, purchase.ID)
+
+	// query = fmt.Sprintf("SELECT * FROM %s WHERE id = $1;", purchasesTable)
+
+	// row := r.db.QueryRow(query, buyer.ID)
+
+	// var updatedPurchase model.Buyer
+	// err := row.Scan(&updatedBuyer.ID, &updatedBuyer.Name, &updatedBuyer.Contact)
+	
+	return err
 }
 
-func (r *PurchaseRepoImpl) DeletePurchase() {
-	log.Println("Repo Delete Purhcase")
+// DeletePurchase deletes purchase with specified id from the database
+func (r *PurchaseRepoImpl) DeletePurchase(id int) error {
+	// log.Println("Repo Delete Purhcase")
+
+	// query to delete purchase in purchases table
+	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1;", purchasesTable)
+
+	_, err := r.db.Exec(query, id)
+
+	return err
 }

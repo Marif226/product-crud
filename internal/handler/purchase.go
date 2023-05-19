@@ -43,16 +43,45 @@ func (h *Handler) GetPurchaseById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-    w.WriteHeader(http.StatusCreated)
+    w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(purchase)
 }
 
 func (h *Handler) UpdatePurchase(w http.ResponseWriter, r *http.Request) {
-	h.services.UpdatePurchase()
-	w.Write([]byte("Update Purchase!\n"))
+	var updatedPurchase model.Purchase
+	err := helpers.BindRequestJSON(r, &updatedPurchase)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	purchaseResponse, err := h.services.UpdatePurchase(updatedPurchase)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(purchaseResponse)
 }
 
 func (h *Handler) DeletePurchase(w http.ResponseWriter, r *http.Request) {
-	h.services.DeletePurchase()
-	w.Write([]byte("Delete Buyer!\n"))
+	// parse id from the request url
+	query := r.URL.Query()
+	id, err := strconv.ParseUint(query.Get("id"), 10, 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.services.DeletePurchase(int(id))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    w.Write([]byte("Purchase deleted!"))
 }

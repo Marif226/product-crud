@@ -77,7 +77,7 @@ func (r *BuyerRepoImpl) UpdateBuyer(buyer model.Buyer) (model.Buyer, error) {
 func (r *BuyerRepoImpl) DeleteBuyer(id int) error {
 	// log.Println("Repo Delete Buyer")
 
-	// query to dekete buyer in buyers table
+	// query to delete buyer in buyers table
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1;", buyersTable)
 
 	_, err := r.db.Exec(query, id)

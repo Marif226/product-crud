@@ -7,7 +7,7 @@ type Buyer struct {
 }
 
 type Purchase struct {
-	ID			int		`json:"id"`
+	ID			int		`json:"id,string"`
 	Name		string	`json:"name"`
 	Description	string	`json:"description"`
 	Quantity	int		`json:"quantity,string"`

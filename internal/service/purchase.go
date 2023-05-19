@@ -1,8 +1,6 @@
 package service
 
 import (
-	"log"
-
 	"github.com/Marif226/product-crud/internal/model"
 	"github.com/Marif226/product-crud/internal/repository"
 )
@@ -29,6 +27,10 @@ func (s *PurchaseServiceImpl) CreatePurchase(purchase model.Purchase) (int, erro
 	return s.repo.CreatePurchase(purchase)
 
 	// log.Println("Service Create Purchase")
+}
+
+func (s *PurchaseServiceImpl) GetAllPurchases() {
+
 }
 
 func (s *PurchaseServiceImpl) GetPurchaseById(id int) (model.PurchaseResponse, error) {
@@ -60,12 +62,41 @@ func (s *PurchaseServiceImpl) GetPurchaseById(id int) (model.PurchaseResponse, e
 	// log.Println("Service Get Purchase")
 }
 
-func (s *PurchaseServiceImpl) UpdatePurchase() {
-	s.repo.UpdatePurchase()
-	log.Println("Service Update Purchase")
+func (s *PurchaseServiceImpl) UpdatePurchase(purchase model.Purchase) (model.PurchaseResponse, error) {
+	var updatedPurchaseResponse model.PurchaseResponse
+
+	err := s.repo.UpdatePurchase(purchase)
+	if err != nil {
+		return updatedPurchaseResponse, err
+	}
+
+	updatedPurchase, err := s.repo.GetPurchaseById(purchase.ID)
+	if err != nil {
+		return updatedPurchaseResponse, err
+	}
+
+	// find buyer of the purchase by id
+	buyer, err := s.buyerRepo.GetBuyerById(purchase.ID)
+	if err != nil {
+		return updatedPurchaseResponse, err
+	}
+
+	// wrap purchase info into purchase response with buyer object
+	updatedPurchaseResponse = model.PurchaseResponse{
+		ID: purchase.ID,
+		Name: updatedPurchase.Name,
+		Description: updatedPurchase.Description,
+		Quantity: updatedPurchase.Quantity,
+		Price: updatedPurchase.Price,
+		Buyer: buyer,
+	}
+
+	return updatedPurchaseResponse, nil
+
+	// log.Println("Service Update Purchase")
 }
 
-func (s *PurchaseServiceImpl) DeletePurchase() {
-	s.repo.DeletePurchase()
-	log.Println("Service Delete Purchase")
+func (s *PurchaseServiceImpl) DeletePurchase(id int) error {
+	return s.repo.DeletePurchase(id)
+	// log.Println("Service Delete Purchase")
 }

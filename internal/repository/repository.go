@@ -18,8 +18,8 @@ type PurchaseRepo interface {
 	CreatePurchase(model.Purchase) (int, error)
 	GetAllPurchases()
 	GetPurchaseById(id int) (model.Purchase, error)
-	UpdatePurchase()
-	DeletePurchase()
+	UpdatePurchase(model.Purchase) (error)
+	DeletePurchase(id int) error
 }
 
 type Repository struct {

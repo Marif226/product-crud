@@ -21,6 +21,10 @@ func (s *BuyerServiceImpl) CreateBuyer(buyer model.Buyer) (int, error) {
 	return s.repo.CreateBuyer(buyer)
 }
 
+func (s *BuyerServiceImpl) GetAllBuyers() {
+	
+}
+
 func (s *BuyerServiceImpl) GetBuyerById(id int) (model.Buyer, error) {
 	// log.Println("Service Get Buyer By Id")
 
