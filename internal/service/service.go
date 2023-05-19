@@ -13,8 +13,8 @@ type BuyerService interface {
 }
 
 type PurchaseService interface {
-	CreatePurchase()
-	GetPurchase()
+	CreatePurchase(purchase model.Purchase) (int, error)
+	GetPurchaseById(id int) (model.PurchaseResponse, error)
 	UpdatePurchase()
 	DeletePurchase()
 }
@@ -27,6 +27,6 @@ type Service struct {
 func New(repos *repository.Repository) *Service {
 	return &Service{
 		BuyerService: NewBuyerService(repos.BuyerRepo),
-		PurchaseService: NewPurchaseService(repos.PurchaseRepo),
+		PurchaseService: NewPurchaseService(repos.PurchaseRepo, repos.BuyerRepo),
 	}
 }

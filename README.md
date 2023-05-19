@@ -34,3 +34,21 @@ docker compose down
 ```
 
 Note: if you want to make data persistent, just uncomment comments in docker-compose.yml, so that it will create a volume next time you build the project.
+
+## Test API
+
+### Test buyer CRUD
+```sh
+curl -X POST -H "Content-Type: application/json" -d '{"name":"John Doe", "contact":"john.doe@gmail.com"}' http://localhost:8090/buyer/create
+curl -X GET -H http://localhost:8090/buyer/get?id=1
+curl -X PUT -H "Content-Type: application/json" -d '{"id":"1", "name":"Johnson Donovan", "contact":"john.donovan@yahoo.com"}' http://localhost:8090/buyer/update
+curl -X DELETE -H http://localhost:8090/buyer/delete?id=1
+```
+
+### Test purchase CRUD
+```sh
+curl -X POST -H "Content-Type: application/json" -d '{"name":"John Doe", "contact":"john.doe@gmail.com"}' http://localhost:8090/purchase/create
+curl -X GET -H http://localhost:8090/purchase/get?id=1
+curl -X PUT -H "Content-Type: application/json" -d '{"id":"1", "name":"Johnson Donovan", "contact":"john.donovan@yahoo.com"}' http://localhost:8090/purchase/update
+curl -X DELETE -H http://localhost:8090/purchase/delete?id=1
+```

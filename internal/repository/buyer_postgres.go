@@ -34,6 +34,11 @@ func (r *BuyerRepoImpl) CreateBuyer(buyer model.Buyer) (int, error) {
 	return id, nil
 }
 
+// GetAllBuyers returns the list of all existing buyers in the database
+func (r *BuyerRepoImpl) GetAllBuyers() {
+
+}
+
 // GetBuyerById return buyer object with matched id with error if failed
 func (r *BuyerRepoImpl) GetBuyerById(id int) (model.Buyer, error) {
 	// log.Println("Repo Get Buyer")

@@ -10,7 +10,16 @@ type Purchase struct {
 	ID			int		`json:"id"`
 	Name		string	`json:"name"`
 	Description	string	`json:"description"`
-	Quantity	int		`json:"qunatity"`
-	Price		int		`json:"price"`
-	BuyerID		int		`json:"buyer_id"`
+	Quantity	int		`json:"quantity,string"`
+	Price		int		`json:"price,string"`
+	BuyerID		int		`json:"buyer_id,string"`
+}
+
+type PurchaseResponse struct {
+	ID			int
+	Name		string
+	Description	string
+	Quantity	int
+	Price		int
+	Buyer		Buyer
 }
