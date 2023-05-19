@@ -35,8 +35,38 @@ func (r *PurchaseRepoImpl) CreatePurchase(purchase model.Purchase) (int, error) 
 }
 
 // GetAllPurchases returns the list of all existing purchases in the database
-func (r *PurchaseRepoImpl) GetAllPurchases() {
+func (r *PurchaseRepoImpl) GetAllPurchases() ([]model.Purchase, error) {
+	// query to get all purchases from the database
+	query := fmt.Sprintf("SELECT * FROM %s;", purchasesTable)
 
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	// count number of purchases in the table
+	var purchasesNumber int
+	query = fmt.Sprintf("SELECT COUNT(*) FROM %s;", purchasesTable)
+	err = r.db.QueryRow(query).Scan(&purchasesNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	purchasesList := make([]model.Purchase, 0, purchasesNumber)
+
+	// append purchases from rows to purchases list
+	for rows.Next() {
+		var purchase model.Purchase
+
+		err := rows.Scan(&purchase.ID, &purchase.Name, &purchase.Description, &purchase.Quantity, &purchase.Price, &purchase.BuyerID)
+		if err != nil {
+			return purchasesList, err
+		}
+
+		purchasesList = append(purchasesList, purchase)
+	}
+
+	return purchasesList, nil
 }
 
 // GetPurchase returns purchase object by specified id. Returns error if failed to find.

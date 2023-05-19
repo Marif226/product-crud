@@ -28,6 +28,17 @@ func (h *Handler) CreateBuyer(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(id)
 }
 
+func (h *Handler) GetAllBuyers(w http.ResponseWriter, r *http.Request) {
+	buyersList, err := h.services.GetAllBuyers()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(buyersList)
+}
+
 func (h *Handler) GetBuyerById(w http.ResponseWriter, r *http.Request) {
 	// parse id from the request url
 	query := r.URL.Query()

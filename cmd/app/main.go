@@ -89,16 +89,17 @@ func initRoutes(router *http.ServeMux, db *sql.DB) {
 	h := handler.New(s)
 
 	// routes for buyer
-	router.HandleFunc("/buyer/create", h.CreateBuyer)
-	router.HandleFunc("/buyer/get", h.GetBuyerById)
-	router.HandleFunc("/buyer/update", h.UpdateBuyer)
-	router.HandleFunc("/buyer/delete", h.DeleteBuyer)
+	router.HandleFunc("/buyers/create", h.CreateBuyer)
+	router.HandleFunc("/buyers", h.GetAllBuyers)
+	router.HandleFunc("/buyers/get", h.GetBuyerById)
+	router.HandleFunc("/buyers/update", h.UpdateBuyer)
+	router.HandleFunc("/buyers/delete", h.DeleteBuyer)
 
 	// routes for purchase
-	router.HandleFunc("/purchase/create", h.CreatePurchase)
-	router.HandleFunc("/purchase/get", h.GetPurchaseById)
-	router.HandleFunc("/purchase/update", h.UpdatePurchase)
-	router.HandleFunc("/purchase/delete", h.DeletePurchase)
+	router.HandleFunc("/purchases/create", h.CreatePurchase)
+	router.HandleFunc("/purchases", h.GetAllPurchases)
+	router.HandleFunc("/purchases/update", h.UpdatePurchase)
+	router.HandleFunc("/purchases/delete", h.DeletePurchase)
 }
 
 // initialize config file, return error if failed

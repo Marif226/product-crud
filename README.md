@@ -39,16 +39,18 @@ Note: if you want to make data persistent, just uncomment comments in docker-com
 
 ### Test buyer CRUD
 ```sh
-curl -X POST -H "Content-Type: application/json" -d '{"name":"John Doe", "contact":"john.doe@gmail.com"}' http://localhost:8090/buyer/create
-curl -X GET -H http://localhost:8090/buyer/get?id=1
-curl -X PUT -H "Content-Type: application/json" -d '{"id":"1", "name":"Johnson Donovan", "contact":"john.donovan@yahoo.com"}' http://localhost:8090/buyer/update
-curl -X DELETE -H http://localhost:8090/buyer/delete?id=1
+curl -X POST -H "Content-Type: application/json" -d '{"name":"John Doe", "contact":"john.doe@gmail.com"}' http://localhost:8090/buyers/create
+curl -X GET http://localhost:8090/buyers
+curl -X GET http://localhost:8090/buyers/get?id=1
+curl -X PUT -H "Content-Type: application/json" -d '{"id":"1", "name":"Johnson Donovan", "contact":"john.donovan@yahoo.com"}' http://localhost:8090/buyers/update
+curl -X DELETE http://localhost:8090/buyers/delete?id=1
 ```
 
 ### Test purchase CRUD
 ```sh
-curl -X POST -H "Content-Type: application/json" -d '{"name":"John Doe", "contact":"john.doe@gmail.com"}' http://localhost:8090/purchase/create
-curl -X GET -H http://localhost:8090/purchase/get?id=1
-curl -X PUT -H "Content-Type: application/json" -d '{"id":"1", "name":"Johnson Donovan", "contact":"john.donovan@yahoo.com"}' http://localhost:8090/purchase/update
-curl -X DELETE -H http://localhost:8090/purchase/delete?id=1
+curl -X POST -H "Content-Type: application/json" -d '{"name":"Football Jersey", "description":"Real Madrid season 2022/2023 jersey", "quantity":"1", "price":"50", "buyer_id":"1"}' http://localhost:8090/purchases/create
+curl -X GET http://localhost:8090/purchases
+curl -X GET http://localhost:8090/purchases/get?id=1
+curl -X PUT -H "Content-Type: application/json" -d '{"id":"1", "name":"Real Updated Jersey", "description":"Real Madrid season 2023/2024 home jersey", "quantity":"3", "price":"75", "buyer_id":"1"}' http://localhost:8090/purchases/update
+curl -X DELETE http://localhost:8090/purchases/delete?id=1
 ```

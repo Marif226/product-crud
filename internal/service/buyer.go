@@ -21,8 +21,8 @@ func (s *BuyerServiceImpl) CreateBuyer(buyer model.Buyer) (int, error) {
 	return s.repo.CreateBuyer(buyer)
 }
 
-func (s *BuyerServiceImpl) GetAllBuyers() {
-	
+func (s *BuyerServiceImpl) GetAllBuyers() ([]model.Buyer, error) {
+	return s.repo.GetAllBuyers()
 }
 
 func (s *BuyerServiceImpl) GetBuyerById(id int) (model.Buyer, error) {
@@ -33,8 +33,18 @@ func (s *BuyerServiceImpl) GetBuyerById(id int) (model.Buyer, error) {
 
 func (s *BuyerServiceImpl) UpdateBuyer(buyer model.Buyer) (model.Buyer, error) {
 	// log.Println("Service Update Buyer")
+	var updatedBuyer model.Buyer
+	err := s.repo.UpdateBuyer(buyer)
+	if err != nil {
+		return updatedBuyer, err
+	}
 
-	return s.repo.UpdateBuyer(buyer)
+	updatedBuyer, err = s.GetBuyerById(buyer.ID)
+	if err != nil {
+		return updatedBuyer, err
+	}
+
+	return updatedBuyer, nil
 }
 
 func (s *BuyerServiceImpl) DeleteBuyer(id int) error {

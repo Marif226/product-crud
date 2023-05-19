@@ -7,7 +7,7 @@ import (
 
 type BuyerService interface {
 	CreateBuyer(buyer model.Buyer) (int, error)
-	GetAllBuyers()
+	GetAllBuyers() ([]model.Buyer, error)
 	GetBuyerById(id int) (model.Buyer, error)
 	UpdateBuyer(buyer model.Buyer) (model.Buyer, error)
 	DeleteBuyer(id int) error
@@ -15,7 +15,7 @@ type BuyerService interface {
 
 type PurchaseService interface {
 	CreatePurchase(purchase model.Purchase) (int, error)
-	GetAllPurchases()
+	GetAllPurchases() ([]model.PurchaseResponse, error)
 	GetPurchaseById(id int) (model.PurchaseResponse, error)
 	UpdatePurchase(purchase model.Purchase) (model.PurchaseResponse, error)
 	DeletePurchase(id int) error

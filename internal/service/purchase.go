@@ -29,8 +29,34 @@ func (s *PurchaseServiceImpl) CreatePurchase(purchase model.Purchase) (int, erro
 	// log.Println("Service Create Purchase")
 }
 
-func (s *PurchaseServiceImpl) GetAllPurchases() {
+func (s *PurchaseServiceImpl) GetAllPurchases() ([]model.PurchaseResponse, error) {
+	purchasesList, err := s.repo.GetAllPurchases()
+	if err != nil {
+		return nil, err
+	}
 
+	purchasesResponseList := make([]model.PurchaseResponse, 0, len(purchasesList))
+
+	for _, purchase := range purchasesList {
+		// find buyer of the purchase by id
+		buyer, err := s.buyerRepo.GetBuyerById(purchase.BuyerID)
+		if err != nil {
+			return nil, err
+		}
+
+		purchaseResponse := model.PurchaseResponse{
+			ID: purchase.ID,
+			Name: purchase.Name,
+			Description: purchase.Description,
+			Quantity: purchase.Quantity,
+			Price: purchase.Price,
+			Buyer: buyer,
+		}
+
+		purchasesResponseList = append(purchasesResponseList, purchaseResponse)
+	}
+
+	return purchasesResponseList, nil
 }
 
 func (s *PurchaseServiceImpl) GetPurchaseById(id int) (model.PurchaseResponse, error) {
