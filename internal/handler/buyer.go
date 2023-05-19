@@ -14,11 +14,13 @@ func (h *Handler) CreateBuyer(w http.ResponseWriter, r *http.Request) {
 	err := helpers.BindRequestJSON(r, &newBuyer)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	id, err := h.services.CreateBuyer(newBuyer)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	
 	w.Header().Set("Content-Type", "application/json")
@@ -32,6 +34,7 @@ func (h *Handler) GetBuyerById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseUint(query.Get("id"), 10, 64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	buyer, err := h.services.GetBuyerById(int(id))
@@ -41,11 +44,40 @@ func (h *Handler) GetBuyerById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) UpdateBuyer(w http.ResponseWriter, r *http.Request) {
-	h.services.UpdateBuyer()
-	w.Write([]byte("Update Buyer!\n"))
+	var updatedBuyer model.Buyer
+	err := helpers.BindRequestJSON(r, &updatedBuyer)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	buyer, err := h.services.UpdateBuyer(updatedBuyer)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
+	w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(buyer)
 }
 
 func (h *Handler) DeleteBuyer(w http.ResponseWriter, r *http.Request) {
-	h.services.DeleteBuyer()
-	w.Write([]byte("Delete Buyer!\n"))
+	// parse id from the request url
+	query := r.URL.Query()
+	id, err := strconv.ParseUint(query.Get("id"), 10, 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.services.DeleteBuyer(int(id))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    w.Write([]byte("Buyer deleted!"))
 }

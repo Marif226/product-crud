@@ -8,8 +8,8 @@ import (
 type BuyerService interface {
 	CreateBuyer(buyer model.Buyer) (int, error)
 	GetBuyerById(id int) (model.Buyer, error)
-	UpdateBuyer()
-	DeleteBuyer()
+	UpdateBuyer(buyer model.Buyer) (model.Buyer, error)
+	DeleteBuyer(id int) error
 }
 
 type PurchaseService interface {

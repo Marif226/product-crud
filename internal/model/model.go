@@ -1,7 +1,7 @@
 package model
 
 type Buyer struct {
-	ID		int		`json:"id"`
+	ID		int		`json:"id,string"`
 	Name	string	`json:"name"`
 	Contact	string	`json:"contact"`
 }

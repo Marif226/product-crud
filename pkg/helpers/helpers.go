@@ -2,17 +2,12 @@ package helpers
 
 import (
 	"encoding/json"
-	"io"
 	"net/http"
 )
 
+// BindRequestJSON bind reqeust in JSON format to given data struct
 func BindRequestJSON(r *http.Request, data interface{}) error {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(body, data)
+	err := json.NewDecoder(r.Body).Decode(data)
 	if err != nil {
 		return err
 	}

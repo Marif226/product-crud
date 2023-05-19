@@ -9,8 +9,8 @@ import (
 type BuyerRepo interface {
 	CreateBuyer(model.Buyer) (int, error)
 	GetBuyerById(id int) (model.Buyer, error)
-	UpdateBuyer()
-	DeleteBuyer()
+	UpdateBuyer(model.Buyer) (model.Buyer, error)
+	DeleteBuyer(id int) error
 }
 
 type PurchaseRepo interface {

@@ -88,11 +88,13 @@ func initRoutes(router *http.ServeMux, db *sql.DB) {
 	s := service.New(r)
 	h := handler.New(s)
 
+	// routes for buyer
 	router.HandleFunc("/buyer/create", h.CreateBuyer)
 	router.HandleFunc("/buyer/get", h.GetBuyerById)
 	router.HandleFunc("/buyer/update", h.UpdateBuyer)
 	router.HandleFunc("/buyer/delete", h.DeleteBuyer)
 
+	// routes for purchase
 	router.HandleFunc("/purchase/create", h.CreatePurchase)
 	router.HandleFunc("/purchase/get", h.GetPurchaseById)
 	router.HandleFunc("/purchase/update", h.UpdatePurchase)
@@ -102,6 +104,7 @@ func initRoutes(router *http.ServeMux, db *sql.DB) {
 // initialize config file, return error if failed
 func initConfig() (*repository.PGConfig, error) {
 	var dbConf *repository.PGConfig
+	// open and read config.yml file
 	yamlFile, err := os.Open("configs/config.yml")
     if err != nil {
 		return dbConf, err
