@@ -22,9 +22,9 @@ func (s *BuyerServiceImpl) CreateBuyer(buyer model.Buyer) (int, error) {
 	return s.repo.CreateBuyer(buyer)
 }
 
-func (s *BuyerServiceImpl) GetBuyerById() {
-	s.repo.GetBuyerById()
+func (s *BuyerServiceImpl) GetBuyerById(id int) (model.Buyer, error) {
 	log.Println("Service Get Buyer By Id")
+	return s.repo.GetBuyerById(id)
 }
 
 func (s *BuyerServiceImpl) UpdateBuyer() {

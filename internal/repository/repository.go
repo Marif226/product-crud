@@ -8,7 +8,7 @@ import (
 
 type BuyerRepo interface {
 	CreateBuyer(model.Buyer) (int, error)
-	GetBuyerById()
+	GetBuyerById(id int) (model.Buyer, error)
 	UpdateBuyer()
 	DeleteBuyer()
 }

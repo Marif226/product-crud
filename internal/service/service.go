@@ -7,7 +7,7 @@ import (
 
 type BuyerService interface {
 	CreateBuyer(buyer model.Buyer) (int, error)
-	GetBuyerById()
+	GetBuyerById(id int) (model.Buyer, error)
 	UpdateBuyer()
 	DeleteBuyer()
 }

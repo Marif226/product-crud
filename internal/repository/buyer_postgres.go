@@ -27,7 +27,7 @@ func (r *BuyerRepoImpl) CreateBuyer(buyer model.Buyer) (int, error) {
 
 	var id int
 	err := row.Scan(&id)
-	log.Println(id)
+	// log.Println(id)
 	if err != nil {
 		return 0, err
 	}
@@ -35,8 +35,21 @@ func (r *BuyerRepoImpl) CreateBuyer(buyer model.Buyer) (int, error) {
 	return id, nil
 }
 
-func (r *BuyerRepoImpl) GetBuyerById() {
+func (r *BuyerRepoImpl) GetBuyerById(id int) (model.Buyer, error) {
 	log.Println("Repo Get Buyer")
+
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1;", buyersTable)
+
+	row := r.db.QueryRow(query, id)
+
+	var buyer model.Buyer
+	err := row.Scan(&buyer.ID, &buyer.Name, &buyer.Contact)
+	log.Println(buyer)
+	if err != nil {
+		return buyer, err
+	}
+
+	return buyer, nil
 }
 
 func (r *BuyerRepoImpl) UpdateBuyer() {
