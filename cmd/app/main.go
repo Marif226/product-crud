@@ -9,10 +9,10 @@ import (
 	"os"
 	"os/signal"
 	"time"
-
 	"github.com/Marif226/product-crud/internal/handler"
 	"github.com/Marif226/product-crud/internal/repository"
 	"github.com/Marif226/product-crud/internal/service"
+	"github.com/Marif226/product-crud/pkg/router"
 	"github.com/joho/godotenv"
 	"gopkg.in/yaml.v3"
 )
@@ -45,7 +45,7 @@ func main() {
 	}
 
 	// create a router
-	router := http.NewServeMux()
+	router := router.New()
 	// initialize routes for given router
 	initRoutes(router, db)
 
@@ -83,23 +83,24 @@ func main() {
 	<-idleConnsClosed
 }
 
-func initRoutes(router *http.ServeMux, db *sql.DB) {
+func initRoutes(router *router.Router, db *sql.DB) {
 	r := repository.New(db)
 	s := service.New(r)
 	h := handler.New(s)
 
 	// routes for buyer
-	router.HandleFunc("/buyers/create", h.CreateBuyer)
-	router.HandleFunc("/buyers", h.GetAllBuyers)
-	router.HandleFunc("/buyers/get", h.GetBuyerById)
-	router.HandleFunc("/buyers/update", h.UpdateBuyer)
-	router.HandleFunc("/buyers/delete", h.DeleteBuyer)
+	router.Add("POST /buyers", h.CreateBuyer)
+	router.Add("GET /buyers", h.GetAllBuyers)
+	router.Add("GET /buyers/get", h.GetBuyerById)
+	router.Add("PUT /buyers", h.UpdateBuyer)
+	router.Add("DELETE /buyers", h.DeleteBuyer)
 
 	// routes for purchase
-	router.HandleFunc("/purchases/create", h.CreatePurchase)
-	router.HandleFunc("/purchases", h.GetAllPurchases)
-	router.HandleFunc("/purchases/update", h.UpdatePurchase)
-	router.HandleFunc("/purchases/delete", h.DeletePurchase)
+	router.Add("POST /purchases", h.CreatePurchase)
+	router.Add("GET /purchases", h.GetAllPurchases)
+	router.Add("GET /purchases/get", h.GetPurchaseById)
+	router.Add("PUT /purchases", h.UpdatePurchase)
+	router.Add("DELETE/purchases ", h.DeletePurchase)
 }
 
 // initialize config file, return error if failed
