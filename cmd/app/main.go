@@ -18,6 +18,43 @@ import (
 )
 
 func main() {
+	router := run()
+
+	srv := &http.Server{
+		Addr:           ":8090",
+		Handler:        router,
+		ReadTimeout:    10 * time.Second, // лимит на чтение запроса в 10 сек
+		WriteTimeout:   10 * time.Second, // лимит на запись ответа в 10 сек
+		MaxHeaderBytes: 1 << 20, // лимит по памяти на заголовок запроса 
+	}
+
+	log.Println("Starting application on port 8090...")
+
+	// "Изящное завершение" сервера согласно стандартной документации
+	idleConnsClosed := make(chan struct{})
+	go func() {
+		sigint := make(chan os.Signal, 1)
+		signal.Notify(sigint, os.Interrupt)
+		<-sigint
+
+		// We received an interrupt signal, shut down.
+		if err := srv.Shutdown(context.Background()); err != nil {
+			// Error from closing listeners, or context timeout:
+			log.Printf("HTTP server Shutdown: %v", err)
+		}
+		close(idleConnsClosed)
+	}()
+
+	err := srv.ListenAndServe()
+	if err != http.ErrServerClosed {
+		// Error starting or closing listener:
+		log.Fatalf("HTTP server ListenAndServe: %v", err)
+	}
+
+	<-idleConnsClosed
+}
+
+func run() (*router.Router) {
 	// initialize database config
 	dbConf, err := initConfig()
 	if err != nil {
@@ -49,38 +86,7 @@ func main() {
 	// initialize routes for given router
 	initRoutes(router, db)
 
-	srv := &http.Server{
-		Addr:           ":8090",
-		Handler:        router,
-		ReadTimeout:    10 * time.Second, // лимит на чтение запроса в 10 сек
-		WriteTimeout:   10 * time.Second, // лимит на запись ответа в 10 сек
-		MaxHeaderBytes: 1 << 20, // лимит по памяти на заголовок запроса 
-	}
-
-	log.Println("Starting http server...")
-
-	// "Изящное завершение" сервера согласно стандартной документации
-	idleConnsClosed := make(chan struct{})
-	go func() {
-		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, os.Interrupt)
-		<-sigint
-
-		// We received an interrupt signal, shut down.
-		if err := srv.Shutdown(context.Background()); err != nil {
-			// Error from closing listeners, or context timeout:
-			log.Printf("HTTP server Shutdown: %v", err)
-		}
-		close(idleConnsClosed)
-	}()
-
-	err = srv.ListenAndServe()
-	if err != http.ErrServerClosed {
-		// Error starting or closing listener:
-		log.Fatalf("HTTP server ListenAndServe: %v", err)
-	}
-
-	<-idleConnsClosed
+	return router
 }
 
 func initRoutes(router *router.Router, db *sql.DB) {
@@ -100,7 +106,7 @@ func initRoutes(router *router.Router, db *sql.DB) {
 	router.Add("GET /purchases", h.GetAllPurchases)
 	router.Add("GET /purchases/get", h.GetPurchaseById)
 	router.Add("PUT /purchases", h.UpdatePurchase)
-	router.Add("DELETE/purchases ", h.DeletePurchase)
+	router.Add("DELETE /purchases", h.DeletePurchase)
 }
 
 // initialize config file, return error if failed

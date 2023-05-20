@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -14,6 +15,11 @@ func (h *Handler) CreatePurchase(w http.ResponseWriter, r *http.Request) {
 	err := helpers.BindRequestJSON(r, &newPurchase)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if newPurchase.Description == "" || newPurchase.Name == "" || newPurchase.Quantity == 0 || newPurchase.Price == 0 || newPurchase.BuyerID == 0 {
+		http.Error(w, errors.New("error: empty fields").Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -34,6 +40,7 @@ func (h *Handler) GetAllPurchases(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(purchasesList)
@@ -63,6 +70,11 @@ func (h *Handler) UpdatePurchase(w http.ResponseWriter, r *http.Request) {
 	err := helpers.BindRequestJSON(r, &updatedPurchase)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if updatedPurchase.Description == "" || updatedPurchase.Name == "" || updatedPurchase.Quantity == 0 || updatedPurchase.Price == 0 || updatedPurchase.BuyerID == 0 {
+		http.Error(w, errors.New("error: empty fields").Error(), http.StatusBadRequest)
 		return
 	}
 

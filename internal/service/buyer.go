@@ -16,8 +16,6 @@ func NewBuyerService(buyerRepo repository.BuyerRepo) *BuyerServiceImpl {
 }
 
 func (s *BuyerServiceImpl) CreateBuyer(buyer model.Buyer) (int, error) {
-	// log.Println("Service Create Buyer")
-
 	return s.repo.CreateBuyer(buyer)
 }
 

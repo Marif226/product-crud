@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -14,6 +15,11 @@ func (h *Handler) CreateBuyer(w http.ResponseWriter, r *http.Request) {
 	err := helpers.BindRequestJSON(r, &newBuyer)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if newBuyer.Name == "" || newBuyer.Contact == ""  {
+		http.Error(w, errors.New("error: empty fields").Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -49,6 +55,10 @@ func (h *Handler) GetBuyerById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	buyer, err := h.services.GetBuyerById(int(id))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(buyer)
@@ -59,6 +69,11 @@ func (h *Handler) UpdateBuyer(w http.ResponseWriter, r *http.Request) {
 	err := helpers.BindRequestJSON(r, &updatedBuyer)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if updatedBuyer.Name == "" || updatedBuyer.Contact == ""  {
+		http.Error(w, errors.New("error: empty fields").Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -90,5 +105,5 @@ func (h *Handler) DeleteBuyer(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusOK)
-    w.Write([]byte("Buyer and his purchases deleted!"))
+    w.Write([]byte("Buyer and his purchases deleted!\n"))
 }

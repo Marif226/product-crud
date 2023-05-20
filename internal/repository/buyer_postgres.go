@@ -2,7 +2,9 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
+
 	"github.com/Marif226/product-crud/internal/model"
 )
 
@@ -114,6 +116,9 @@ func (r *BuyerRepoImpl) DeleteBuyer(id int) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1;", buyersTable)
 
 	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return errors.New("buyer with given id does not exist")
+	}
 
-	return err
+	return nil
 } 

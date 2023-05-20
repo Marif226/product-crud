@@ -7,18 +7,18 @@ import (
 )
 
 type BuyerRepo interface {
-	CreateBuyer(model.Buyer) (int, error)
+	CreateBuyer(buyer model.Buyer) (int, error)
 	GetAllBuyers() ([]model.Buyer, error)
 	GetBuyerById(id int) (model.Buyer, error)
-	UpdateBuyer(model.Buyer) (error)
+	UpdateBuyer(buyer model.Buyer) (error)
 	DeleteBuyer(id int) error
 }
 
 type PurchaseRepo interface {
-	CreatePurchase(model.Purchase) (int, error)
+	CreatePurchase(purchase model.Purchase) (int, error)
 	GetAllPurchases() ([]model.Purchase, error)
 	GetPurchaseById(id int) (model.Purchase, error)
-	UpdatePurchase(model.Purchase) (error)
+	UpdatePurchase(purchase model.Purchase) (error)
 	DeletePurchase(id int) error
 }
 
