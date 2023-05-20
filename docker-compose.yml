@@ -1,6 +1,15 @@
 version: '3.9'
 
 services:
+  product-crud:
+    build: ./
+    command: ./wait-for-postgres.sh db ./product-crud
+    ports:
+      - 8090:8090
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=$DB_PASSWORD
   db:
     image: postgres:latest
     # volumes:
@@ -15,7 +24,7 @@ services:
       timeout: 5s
       retries: 5
     ports:
-      - "5432:5432"
+      - 5436:5432
   migrate:
     image: migrate/migrate:v4.15.2
     profiles: ["tools"]
